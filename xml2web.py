@@ -158,6 +158,9 @@ publics.write("<h3>\n\tTrabalhos completos publicados em anais e congressos\n</h
 publics.write("<!-- Iframe para as publicaçoes em anais e congressos -->\n")
 publics.write("\t\t\t<iframe src='trab_anais.html'   name='t_anais' id='anais'>     </iframe>\n")
 
+publics.write("</body>\n</html>")
+criaFooter(index)
+publics.close()
 ###############################################################################
 '''                  Publicações de destaque do usuário                     '''
 # Artigos (Destaque -> FLAG-RELEVANCIA="SIM")
@@ -530,7 +533,6 @@ index.write("\t\t\t\t\t<a class='menu_rodape' href='contato.html'>Contato       
 index.write("\t</footer>                      <!--Aqui termina o rodapé da página-->\n\n")
 index.write("\t</div>\n</body>\n</html>")
 
-criaFooter(index)
 index.close()                                         # Fechando o arquivo
 ###############################################################################
 
