@@ -1,21 +1,24 @@
 #!/usr/bin/python
 # coding: UTF-8
-'''****************************************************************************
-*                  __author__ = "Levindo Gabriel Taschetto Neto"              *
-*                  __email__ = "falecom@levindoneto.com"                      *
-*                  __status__ = "Finalizado"                                 *
+'''*****************************************************************************
+*                  __author__ = "Levindo Gabriel Taschetto Neto"               *
+*                  __email__ = "falecom@levindoneto.com"                       *
+*                  __status__ = "Finalizado"                                   *
 *****************************************************************************'''
-from operator import itemgetter           # Para ordenar o dicionário de listas
+###############################################################################
+'''                            Biblioteca(s)                                 '''
 import xml.dom.minidom
 
 # Abrindo o arquivo:
-xmldoc = xml.dom.minidom.parse('curriculo.xml')
 
-# Salvando em 'dados' tudo que tem a tag que esta' dentro de ("..."):
+nomeArqXML = raw_input("Insira o nome do arquivo XML (sem o .XML): ")
+xmldoc = xml.dom.minidom.parse(nomeArqXML + '.xml')
+
+# Salvando em 'dados' tudo que tem a tag que está dentro de ("..."):
 dados = xmldoc.getElementsByTagName("DADOS-GERAIS")
 
 ###############################################################################
-'''             Lendo e-mail do usuario e fazendo a manipulação             '''
+'''             Lendo e-mail do usuário e fazendo a manipulação             '''
 '''                  Para ter o emailname e o emailserver                   '''
 # Rebendo e-mail do usuário via teclado
 email = raw_input("Insira seu e-mail: ")
@@ -27,7 +30,7 @@ for z in email:
     if(z == '@'):
         break
     else:
-        emailname += z      # Montando string do emailname  
+        emailname += z         # Montando string do emailname
 
 aux_email = email
 aux_email =  aux_email.replace(emailname + '@', "")    
@@ -77,11 +80,12 @@ def criaHeader(variavel2):
     variavel2.write("\t\t\t<nav id='menu'>\n"                                                  )
     variavel2.write("\t\t\t\t<h1> Menu Principal </h1>\n"                                      )
     variavel2.write("\t\t\t\t<ul type='disc'>\n"                                               )
-    variavel2.write("\t\t\t\t<li> <a href='index.html'>Página Inicial</a></li>\n"              )
-    variavel2.write("\t\t\t\t<li> <a href='publicacoes.html'>Publicações</a></li>\n"           )
-    variavel2.write("\t\t\t\t<li> <a href='orientacoes.html'>Orientações</a></li>\n"           )    
-    variavel2.write("\t\t\t\t<li> <a href='pesquisa.html'>Pesquisa</a></li>\n"                 )
-    variavel2.write("\t\t\t\t<li> <a href='contato.html'>Contato</a></li>\n"                   )
+    variavel2.write("\t\t\t\t\t<li> <a href='index.html'>Página Inicial</a></li>\n"            )
+    variavel2.write("\t\t\t\t\t<li> <a href='publicacoes.html'>Publicações</a></li>\n"         )
+    variavel2.write("\t\t\t\t\t<li> <a href='orientacoes.html'>Orientações</a></li>\n"         )
+    variavel2.write("\t\t\t\t\t<li> <a href='pesquisa.html'>Pesquisa</a></li>\n"               )
+    variavel2.write("\t\t\t\t\t<li> <a href='contato.html'>Contato</a></li>\n"                 )
+    variavel2.write("\t\t\t\t</ul>\n"                                                          )
     variavel2.write("\t\t\t</nav>\n"                                                           )
     variavel2.write("\t\t</header>\n"                                                          )
 ###############################################################################
@@ -100,7 +104,7 @@ def criaFooter(variavel3):
 ###############################################################################
 
 ###############################################################################
-def bigSpace(variavel4):
+def bigSpace(variavel4):                   # Função que faz várias quebras de linha
     variavel4.write("<br/><br/><br/><br/><br/><br/><br/><br/>")
 ###############################################################################
 
@@ -109,16 +113,15 @@ def bigSpace(variavel4):
 nome = open("nome.html", "w")              # Abrindo/criando o arquivo no modo escrita
 criaHTML(nome)                             # Configurações iniciais do HTML
 nome.write("<h1>\n")
-#-> Nome
+# Nome completo do usuário
 for n in dados:
-    #print(n.toxml())                      # Para imprimir tudo que tem dentro da tag<> </>
     nomeUser = n.attributes["NOME-COMPLETO"].value # Para imprimir o que tem dentro dos IDs
-nomeUser = nomeUser.encode('utf-8')        # Ajuste de codificação
-nome.write(str(nomeUser))                  # write só trabalha com strings
+nomeUser = nomeUser.encode('utf-8')                # Ajuste de codificação
+nome.write(str(nomeUser))                          # Write só trabalha com strings
 nome.write(" \n</h1>\n")
 
 nome.write("</body>\n</html>")
-nome.close() # Fechando o arquivo
+nome.close()                               # Fechando o arquivo
 ###############################################################################
 
 ###############################################################################
@@ -127,17 +130,15 @@ descricao = open("descricao.html", "w")    # Abrindo/criando o arquivo no modo e
 criaHTML(descricao)                        # Configurações iniciais do HTML
 descricao.write("<p id=descricao_user>\n")
  
-#-> Pegando do XML a descrição em português do usuário:
+# Pegando do XML a descrição em português do usuário:
 descricaoPT = xmldoc.getElementsByTagName("RESUMO-CV")
 for d in descricaoPT:
     desc = d.attributes["TEXTO-RESUMO-CV-RH"].value
 
-#print desc
 desc = desc.encode('utf-8')                # Ajuste de codificação
 
-descricao.write(str(desc))                 # write so trabalha com strings
+descricao.write(str(desc))                 # Write so trabalha com strings
 descricao.write(" \n</p>\n")
-
 
 descricao.write("</body>\n</html>")
 descricao.close()                          # Fechando o arquivo
@@ -157,10 +158,11 @@ publics.write("\t\t\t<iframe src='periodicos.html'   name='a_periodicos' id='per
 publics.write("<h3>\n\tTrabalhos completos publicados em anais e congressos\n</h3>\n")
 publics.write("<!-- Iframe para as publicaçoes em anais e congressos -->\n")
 publics.write("\t\t\t<iframe src='trab_anais.html'   name='t_anais' id='anais'>     </iframe>\n")
+publics.write("</br></br></br></br>")
 
+criaFooter(publics)
 publics.write("</body>\n</html>")
-criaFooter(index)
-publics.close()
+publics.close()                             # Fechando o arquivo
 ###############################################################################
 '''                  Publicações de destaque do usuário                     '''
 # Artigos (Destaque -> FLAG-RELEVANCIA="SIM")
@@ -183,12 +185,9 @@ for j in artigosDestaque:
     link_do_artigoR =  link_do_artigoR.replace("[", "")
     link_do_artigoR =  link_do_artigoR.replace("]", "")
 
-
     flagRelevancia = j.attributes["FLAG-RELEVANCIA"].value
     titulo_do_artigoR = j.attributes["TITULO-DO-ARTIGO"].value
     ano_do_artigoR = j.attributes["ANO-DO-ARTIGO"].value
-
-    #print(flagRelevancia)
 
     if flagRelevancia == "SIM":
         relevantes.write('<a target="blank" ')
@@ -203,6 +202,9 @@ for j in artigosDestaque:
     else:
         flagImprimirDestaques = 0
 
+
+relevantes.write("</body>\n</html>")
+relevantes.close() # Fechando o arquivo
 ###############################################################################
 
 ###############################################################################
@@ -247,7 +249,7 @@ for c in contato:
     # E-mail:
     estado = c.attributes["UF"].value
     
-    '''---------------------------------------------------------------------'''
+    '''-------------------------------------------------------------'''
 
     # Telefone (Sem ramal):
     telefone = "(" + c.attributes["DDD"].value + ") " + c.attributes["TELEFONE"].value
@@ -362,7 +364,7 @@ logos.close()                                         # Fechando o arquivo
 contato = open("contato.html", "w")                   # Abrindo/criando o arquivo no modo escrita
 criaHeader(contato)
 
-contato.write("<br\n><h3>Endereço</h3>")
+contato.write("</br>\n<h3>Endereço</h3>")
 
 contato_aba = xmldoc.getElementsByTagName("ENDERECO-PROFISSIONAL")
 for v in contato_aba:
@@ -399,7 +401,7 @@ for v in contato_aba:
     # E-mail:
     estado2 = v.attributes["UF"].value
     
-    '''---------------------------------------------------------------------'''
+    '''-------------------------------------------------------------'''
 
     # Telefone (Sem ramal):
     telefone2 = "(" + v.attributes["DDD"].value + ") " + v.attributes["TELEFONE"].value
@@ -409,14 +411,14 @@ for v in contato_aba:
 instituicao2 = instituicao2.encode('utf-8')           # Ajuste de codificação    
 contato.write("</p>")
 contato.write("\n")
-contato.write('<section id = "contatoAba">')       # Seção para organização do paragrafo
+contato.write('<section id = "contatoAba">')          # Seção para organização do paragrafo
 contato.write("\n")
 contato.write("\t")
 contato.write(str(instituicao2))
 contato.write(", ")
 
 #Instituto
-instituto2 = instituto2.encode('utf-8')            # Ajuste de codificação
+instituto2 = instituto2.encode('utf-8')               # Ajuste de codificação
 contato.write(str(instituto2))
 contato.write("\n<br/>\n")
 
@@ -424,22 +426,22 @@ contato.write("\n<br/>\n")
 departamento2 = departamento2.encode('utf-8')         # Ajuste de codificação
 contato.write("\t")
 contato.write(str(departamento2)) 
-contato.write("\n<br/>\n")                         # Quebra de linha  
+contato.write("\n<br/>\n")                            # Quebra de linha
 
 #Localização
 local2 = local2.encode('utf-8')                       # Ajuste de codificação
 contato.write("\t")
 contato.write(str(local2))
-contato.write("\n<br/>\n")                         # Quebra de linha
+contato.write("\n<br/>\n")                            # Quebra de linha
 
 #Bairro
 bairro2 = bairro2.encode('utf-8')                     # Ajuste de codificação
 contato.write("\t")
 contato.write(str(bairro2))
-contato.write("\n<br/>\n")                         # Quebra de linha
+contato.write("\n<br/>\n")                            # Quebra de linha
 
 #CEP
-contato.write("\t")
+contato.write("\t")                                   # Tabulação
 contato.write("CEP: ")
 contato.write(str(cep2))
 contato.write(", ")
@@ -489,15 +491,15 @@ contato.write('\n<section id="email_contato">\n')
 contato.write("<my-email data-user='" + emailname + "'" +  " data-domain= '"+ emailserver + "'>@</my-email>")
 contato.write("\n</section>")
 contato.write("\n<br/><br/><br/><br/><br/><br/><br/>\n")
-contato.write("\n<br/><br/><br/>\n")
+contato.write("\n<br/><br/><br/><br/>\n")
 bigSpace(contato)
 criaFooter(contato)
-contato.close()                                         # Fechando o arquivo
+contato.close()                                       # Fechando o arquivo
 ###############################################################################
 
 ###############################################################################
 '''                              Aba 'INDEX'                                '''
-index = open("index.html", "w")                   # Abrindo/criando o arquivo no modo escrita
+index = open("index.html", "w")                       # Abrindo/criando o arquivo no modo escrita
 criaHeader(index)
 
 index.write("\n\t<section id='corpo' </p>\n")
@@ -538,7 +540,7 @@ index.close()                                         # Fechando o arquivo
 
 ###############################################################################
 '''                            Aba 'PESQUISA'                               '''
-pesquisa = open("pesquisa.html", "w")                   # Abrindo/criando o arquivo no modo escrita
+pesquisa = open("pesquisa.html", "w")                # Abrindo/criando o arquivo no modo escrita
 criaHeader(pesquisa)
 
 pesquisa.write("<h3>\n\tProjetos de pesquisa\n</h3>\n")
@@ -547,63 +549,126 @@ pesquisa.write("\t\t\t<iframe src='projetos_pesquisa.html'   name='proj_pesq' id
 
 bigSpace(pesquisa)
 criaFooter(pesquisa)
-pesquisa.close()                                         # Fechando o arquivo
+pesquisa.close()                                     # Fechando o arquivo
 ###############################################################################
 
-'''        Iframes para as abas pesquisa,MAS VA publicações e orientações         '''
 ###############################################################################
 '''           Iframe - projetos_pesquisa.html ( Aba Pesquisa )              '''
-projetos_pesquisa = open("projetos_pesquisa.html", "w")                   # Abrindo/criando o arquivo no modo escrita
+projetos_pesquisa = open("projetos_pesquisa.html", "w")     # Abrindo/criando o arquivo no modo escrita
+criaHTML(projetos_pesquisa)                                 # Configurações iniciais do HTML
 
-criaHTML(projetos_pesquisa)                             # Configurações iniciais do HTML 
-#-> Pegando do XML os projetos de pesquisa
+contadorPesquisa = 0                                        # Contador de projetos de pesquisa
+
+lista_projeto_pesquisa = []
+lista_descricao_pesquisa = []
+lista_anoInicio_pesquisa = []
+lista_anoFim_pesquisa = []
+
+# Um dicionário para cada lista, assim a relação entre eles é feita pelos indices dos dicicionarios
+dicionario_projeto_pesquisa = {}
+dicionario_descricao_pesquisa = {}
+dicionario_anoInicio_pesquisa = {}
+dicionario_anoFim_pesquisa = {}
+
+# Pegando do XML, os dados de projetos de pesquisa
 projPesq = xmldoc.getElementsByTagName("PROJETO-DE-PESQUISA")
-for proj in projPesq:
-    nome_projeto = proj.attributes["NOME-DO-PROJETO"].value
-    nome_projeto = nome_projeto.encode('utf-8')    
-    desc_projeto = proj.attributes["DESCRICAO-DO-PROJETO"].value    
-    desc_projeto = desc_projeto.encode('utf-8')
-    ano_inicio_proj = proj.attributes["ANO-INICIO"].value
-    ano_fim_proj = proj.attributes["ANO-FIM"].value
-    if ano_fim_proj == "":
-        ano_fim_proj = "Atual"        
-    
-    projetos_pesquisa.write("<p class=nome_projeto>" + str(nome_projeto) + " (" + str(ano_inicio_proj) + " - " + str(ano_fim_proj) + ")" + "</p>" + "\n")
-    projetos_pesquisa.write("<p class='desc_projeto'>" + str(desc_projeto) + "</p>" + "</br>" + "\n\n")
-#print desc
-#desc = desc.encode('utf-8')                # Ajuste de codificação
+if projPesq is not None:
+    for proj in projPesq:
+        nome_projeto = proj.attributes["NOME-DO-PROJETO"].value
+        nome_projeto = nome_projeto.encode('utf-8')
+        lista_projeto_pesquisa.append(nome_projeto)
+        desc_projeto = proj.attributes["DESCRICAO-DO-PROJETO"].value
+        desc_projeto = desc_projeto.encode('utf-8')
+        lista_descricao_pesquisa.append(desc_projeto)
+        ano_inicio_proj = proj.attributes["ANO-INICIO"].value
+        lista_anoInicio_pesquisa.append(ano_inicio_proj)
+
+        ano_fim_proj = proj.attributes["ANO-FIM"].value
+        if ano_fim_proj == "":
+            ano_fim_proj = "Atual"
+
+        lista_anoFim_pesquisa.append(ano_fim_proj)
+        contadorPesquisa += 1
+
+    lista_projeto_pesquisa.reverse()
+    lista_descricao_pesquisa.reverse()
+    lista_anoInicio_pesquisa.reverse()
+    lista_anoFim_pesquisa.reverse()
+
+
+    for pes in range(contadorPesquisa):
+        projetos_pesquisa.write("<p class=nome_projeto>" + str(lista_projeto_pesquisa[pes]) + " (" + str(lista_anoInicio_pesquisa[pes]) + " - " + str(lista_anoFim_pesquisa[pes]) + ")" + "</p>" + "\n")
+        projetos_pesquisa.write("<p class='desc_projeto'>" + str(lista_descricao_pesquisa[pes]) + "</p>" + "</br>" + "\n\n")
 
 projetos_pesquisa.write("</body>\n</html>")
 projetos_pesquisa.close()    
 ###############################################################################
 
 ###############################################################################
-'''                          Aba 'ORIENTACOES'                              '''
-orientacoes = open("orientacoes.html", "w")                   # Abrindo/criando o arquivo no modo escrita
+'''                          Aba 'ORIENTAÇÕES'                              '''
+orientacoes = open("orientacoes.html", "w")                        # Abrindo/criando o arquivo no modo escrita
 criaHeader(orientacoes)
 
-orientacoes.write("<h3>\n\tOrientações de Doutorado\n</h3>\n")
-orientacoes.write("<!-- Iframe para as orientações de doutorado -->\n")
-orientacoes.write("\t\t\t<iframe src='orientacoes_doutorado.html'   name='o_dout' id='orient_d'>     </iframe>\n")
+orientacoes.write("</br><a class='link_orientacoes' href='orientacoes_concluidas.html'>Orientações concluídas</a></br></br>\n")
+orientacoes.write("<a class='link_orientacoes' href='orientacoes_andamento.html'>Orientações em andamento</a></br>\n")
 
-orientacoes.write("<h3>\n\tOrientações de Mestrado\n</h3>\n")
-orientacoes.write("<!-- Iframe para as orientações de mestrado -->\n")
-orientacoes.write("\t\t\t<iframe src='orientacoes_mestrado.html'   name='o_mest' id='orient_m'>     </iframe>\n")
-
-orientacoes.write("<h3>\n\tOrientação de graduação\n</h3>\n")
-orientacoes.write("<!-- Iframe para os bolsistas de IC -->\n")
-orientacoes.write("\t\t\t<iframe src='orientacoes_graduacao.html'   name='b_ic' id='orient_ic'>     </iframe>\n")
+bigSpace(orientacoes)
+bigSpace(orientacoes)
+bigSpace(orientacoes)
+bigSpace(orientacoes)
 
 criaFooter(orientacoes)
 orientacoes.write("</body>\n</html>")
-orientacoes.close()  
+orientacoes.close()
 ###############################################################################
 
+###############################################################################
+'''                      Orientações Concluídas                             '''
+orientacoes_concluidas = open("orientacoes_concluidas.html", "w")   # Abrindo/criando o arquivo no modo escrita
+criaHeader(orientacoes_concluidas)
+
+orientacoes_concluidas.write("<h3>\n\tOrientações concluídas de Doutorado\n</h3>\n")
+orientacoes_concluidas.write("<!-- Iframe para as orientações concluídas de doutorado -->\n")
+orientacoes_concluidas.write("\t\t\t<iframe src='orientacoes_doutorado.html'   name='o_dout' class='orient_d'>     </iframe>\n")
+
+orientacoes_concluidas.write("<h3>\n\tOrientações concluídas de Mestrado\n</h3>\n")
+orientacoes_concluidas.write("<!-- Iframe para as orientações concluídas de mestrado -->\n")
+orientacoes_concluidas.write("\t\t\t<iframe src='orientacoes_mestrado.html'   name='o_mest' class='orient_m'>     </iframe>\n")
+
+orientacoes_concluidas.write("<h3>\n\tOrientações concluídas de Graduação\n</h3>\n")
+orientacoes_concluidas.write("<!-- Iframe para as orientações concluídas de graduação -->\n")
+orientacoes_concluidas.write("\t\t\t<iframe src='orientacoes_graduacao.html'   name='b_ic' class='orient_ic'>     </iframe>\n")
+
+criaFooter(orientacoes_concluidas)
+orientacoes_concluidas.write("</body>\n</html>")
+orientacoes_concluidas.close()
+###############################################################################
+
+'''                     Orientações em andamento                            '''
+orientacoes_andamento = open("orientacoes_andamento.html", "w")    # Abrindo/criando o arquivo no modo escrita
+criaHeader(orientacoes_andamento)
+
+orientacoes_andamento.write("<h3>\n\tOrientações de Doutorado em andamento\n</h3>\n")
+orientacoes_andamento.write("<!-- Iframe para as orientações de doutorado em andamento -->\n")
+orientacoes_andamento.write("\t\t\t<iframe src='orientacoes_doutorado_and.html'   name='o_dout_andamento' class='orient_d'>     </iframe>\n")
+
+orientacoes_andamento.write("<h3>\n\tOrientações de Mestrado em andamento\n</h3>\n")
+orientacoes_andamento.write("<!-- Iframe para as orientações de mestrado em andamento -->\n")
+orientacoes_andamento.write("\t\t\t<iframe src='orientacoes_mestrado_and.html'   name='o_mest_andamento' class='orient_m'>     </iframe>\n")
+
+orientacoes_andamento.write("<h3>\n\tOrientações de Graduação em andamento\n</h3>\n")
+orientacoes_andamento.write("<!-- Iframe para as orientações de graduação em andamento -->\n")
+orientacoes_andamento.write("\t\t\t<iframe src='orientacoes_graduacao_and.html'   name='b_ic_andamento' class='orient_ic'>     </iframe>\n")
+
+criaFooter(orientacoes_andamento)
+orientacoes_andamento.write("</body>\n</html>")
+orientacoes_andamento.close()
 
 ###############################################################################
 '''                            Orientações                                  '''
 ###############################################################################
 
+'''                    **  Orientações Concluídas  **                       '''
 ###############################################################################
 '''          Iframe - orientacoes_doutorado.html (Aba Orientações)          '''
 orientacoes_doutorado = open("orientacoes_doutorado.html", "w")       # Abrindo/criando o arquivo no modo escrita
@@ -613,81 +678,82 @@ criaHTML(orientacoes_doutorado)                                       # Configur
 lista_nome_doutorado = []
 lista_ano_doutorado = []
 lista_titulo_doutorado = []
-contDoutorado = 0                  # Contador do número de orientações de doutorado
+contDoutorado = 0                                                     # Contador do número de orientações de doutorado
 
 basico_doutorado = xmldoc.getElementsByTagName("DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-DOUTORADO")
-for dddb in basico_doutorado:
-    titulo_doutorado = dddb.attributes["TITULO"].value              # Título do doutorando
-    titulo_doutorado = titulo_doutorado.encode('utf-8')
-    titulo_doutorado = str(titulo_doutorado)
-    lista_titulo_doutorado.append(titulo_doutorado)
+if basico_doutorado is not None:
+    for dddb in basico_doutorado:
+        titulo_doutorado = dddb.attributes["TITULO"].value            # Título do doutorando
+        titulo_doutorado = titulo_doutorado.encode('utf-8')
+        titulo_doutorado = str(titulo_doutorado)
+        lista_titulo_doutorado.append(titulo_doutorado)
 
-    ano_doutorado = dddb.attributes["ANO"].value              # Ano do doutorado
-    ano_doutorado = ano_doutorado.encode('utf-8')
-    ano_doutorado = str(ano_doutorado)
-    lista_ano_doutorado.append(ano_doutorado)
+        ano_doutorado = dddb.attributes["ANO"].value                  # Ano do doutorado
+        ano_doutorado = ano_doutorado.encode('utf-8')
+        ano_doutorado = str(ano_doutorado)
+        lista_ano_doutorado.append(ano_doutorado)
 
-    contDoutorado += 1
+        contDoutorado += 1
 
-detalhamento_doutorado = xmldoc.getElementsByTagName("DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-DOUTORADO")
-for ddd in detalhamento_doutorado:
-    doutorando = ddd.attributes["NOME-DO-ORIENTADO"].value              # Nome do doutorando
-    doutorando = doutorando.encode('utf-8')
-    doutorando = str(doutorando)
-    lista_nome_doutorado.append(doutorando)
+    detalhamento_doutorado = xmldoc.getElementsByTagName("DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-DOUTORADO")
+    for ddd in detalhamento_doutorado:
+        doutorando = ddd.attributes["NOME-DO-ORIENTADO"].value        # Nome do doutorando
+        doutorando = doutorando.encode('utf-8')
+        doutorando = str(doutorando)
+        lista_nome_doutorado.append(doutorando)
 
-lista_nome_doutorado.reverse()
-lista_ano_doutorado.reverse()
-lista_titulo_doutorado.reverse()
+    lista_nome_doutorado.reverse()
+    lista_ano_doutorado.reverse()
+    lista_titulo_doutorado.reverse()
 
-for phd in range(contDoutorado):
-    orientacoes_doutorado.write('<p>' + str(lista_nome_doutorado[phd]) + ' (' + str(lista_ano_doutorado[phd]) + ') </p>' + '\n')
-    orientacoes_doutorado.write('<p class="titulo_orientacoes">' + str(lista_titulo_doutorado[phd]) + '</p>')
+    for phd in range(contDoutorado):
+        orientacoes_doutorado.write('<p>' + str(lista_nome_doutorado[phd]) + ' (' + str(lista_ano_doutorado[phd]) + ') </p>' + '\n')
+        orientacoes_doutorado.write('<p class="titulo_orientacoes">' + str(lista_titulo_doutorado[phd]) + '</p>')
 
 orientacoes_doutorado.write("</body>\n</html>")
 orientacoes_doutorado.close()
-
 ###############################################################################
 
 ###############################################################################
 '''          Iframe - orientacoes_mestrado.html (Aba Orientações)           '''
-orientacoes_mestrado = open("orientacoes_mestrado.html", "w")     # Abrindo/criando o arquivo no modo escrita
-criaHTML(orientacoes_mestrado)                                    # Configurações iniciais do HTML
+orientacoes_mestrado = open("orientacoes_mestrado.html", "w")          # Abrindo/criando o arquivo no modo escrita
+criaHTML(orientacoes_mestrado)                                         # Configurações iniciais do HTML
 
 # Inicializando as listas de dados para as orientações de mestrado
 lista_nome_mestrado = []
 lista_ano_mestrado = []
 lista_titulo_mestrado = []
-contMestrado = 0                     # Contador do número de orientações de mestrado
+contMestrado = 0                                                       # Contador do número de orientações de mestrado
 
 basico_mestrado = xmldoc.getElementsByTagName("DADOS-BASICOS-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO")
-for mmmb in basico_mestrado:
-    titulo_mestrado = mmmb.attributes["TITULO"].value                 # Título do mestrando
-    titulo_mestrado = titulo_mestrado.encode('utf-8')
-    titulo_mestrado = str(titulo_mestrado)
-    lista_titulo_mestrado.append(titulo_mestrado)
+if basico_mestrado is not None:
+    for mmmb in basico_mestrado:
+        titulo_mestrado = mmmb.attributes["TITULO"].value              # Título do mestrndo
+        titulo_mestrado = titulo_mestrado.encode('utf-8')
+        titulo_mestrado = str(titulo_mestrado)
+        lista_titulo_mestrado.append(titulo_mestrado)
 
-    ano_mestrado = mmmb.attributes["ANO"].value                       # Ano do mestrando
-    ano_mestrado = ano_mestrado.encode('utf-8')
-    ano_mestrado = str(ano_mestrado)
-    lista_ano_mestrado.append(ano_mestrado)
+        ano_mestrado = mmmb.attributes["ANO"].value                    # Ano do mestrado
+        ano_mestrado = ano_mestrado.encode('utf-8')
+        ano_mestrado = str(ano_mestrado)
+        lista_ano_mestrado.append(ano_mestrado)
 
-    contMestrado += 1
+        contMestrado += 1
 
-detalhamento_mestrado = xmldoc.getElementsByTagName("DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO")
-for mmm in detalhamento_mestrado:
-    mestrando = mmm.attributes["NOME-DO-ORIENTADO"].value              # Nome do mestrando
-    mestrando = mestrando.encode('utf-8')
-    mestrando = str(mestrando)
-    lista_nome_mestrado.append(mestrando)
+    detalhamento_mestrado = xmldoc.getElementsByTagName("DETALHAMENTO-DE-ORIENTACOES-CONCLUIDAS-PARA-MESTRADO")
+    for mmm in detalhamento_mestrado:
+        mestrando = mmm.attributes["NOME-DO-ORIENTADO"].value          # Nome do mestre
+        mestrando = mestrando.encode('utf-8')
+        mestrando = str(mestrando)
+        lista_nome_mestrado.append(mestrando)
 
-lista_nome_mestrado.reverse()
-lista_ano_mestrado.reverse()
-lista_titulo_mestrado.reverse()
+    lista_nome_mestrado.reverse()
+    lista_ano_mestrado.reverse()
+    lista_titulo_mestrado.reverse()
 
-for mest in range(contMestrado):
-    orientacoes_mestrado.write('<p>' + str(lista_nome_mestrado[mest]) + ' (' + str(lista_ano_mestrado[mest]) + ') </p>' + '\n')
-    orientacoes_mestrado.write('<p class="titulo_orientacoes">' + str(lista_titulo_mestrado[mest]) + '</p>')
+    for mest in range(contMestrado):
+        orientacoes_mestrado.write('<p>' + str(lista_nome_mestrado[mest]) + ' (' + str(lista_ano_mestrado[mest]) + ') </p>' + '\n')
+        orientacoes_mestrado.write('<p class="titulo_orientacoes">' + str(lista_titulo_mestrado[mest]) + '</p>')
 
 orientacoes_mestrado.write("</body>\n</html>")
 orientacoes_mestrado.close()
@@ -695,134 +761,295 @@ orientacoes_mestrado.close()
 
 ###############################################################################
 '''               Iframe - orientacoes_graduacao.html (Aba Orientações)              '''
-orientacoes_graduacao = open("orientacoes_graduacao.html", "w")             # Abrindo/criando o arquivo no modo escrita
-criaHTML(orientacoes_graduacao)                                    # Configurações iniciais do HTML
+orientacoes_graduacao = open("orientacoes_graduacao.html", "w")        # Abrindo/criando o arquivo no modo escrita
+criaHTML(orientacoes_graduacao)                                        # Configurações iniciais do HTML
 
 # Inicializando as listas de dados para as orientações de graduação
 lista_nome_graduacao = []
 lista_ano_graduacao = []
 lista_titulo_graduacao = []
-contGraduacao = 0                     # Contador do número de orientações de mestrado
+contGraduacao = 0                                                      # Contador do número de orientações de mestrado
 
-flagNatureza = 0                      # 1-IC, 2-TCC
+flagNatureza = 0                                                       # 1-IC, 2-TCC
 
 basico_graduacao = xmldoc.getElementsByTagName("DADOS-BASICOS-DE-OUTRAS-ORIENTACOES-CONCLUIDAS")
-for gggb in basico_graduacao:
+if basico_graduacao is not None:
+    for gggb in basico_graduacao:
+        titulo_graduacao = gggb.attributes["TITULO"].value             # Título do projeto de graduação
+        titulo_graduacao = titulo_graduacao.encode('utf-8')
+        titulo_graduacao = str(titulo_graduacao)
 
-    titulo_graduacao = gggb.attributes["TITULO"].value                 # Título do graduando
-    titulo_graduacao = titulo_graduacao.encode('utf-8')
-    titulo_graduacao = str(titulo_graduacao)
+        naturezaOrientacao = gggb.attributes["NATUREZA"].value
+        naturezaOrientacao = naturezaOrientacao.encode('utf8')
 
-    naturezaOrientacao = gggb.attributes["NATUREZA"].value
-    if naturezaOrientacao == "INICIACAO_CIENTIFICA":
-       titulo_graduacao = titulo_graduacao + " - <u>Iniciação Científica</u>"
+        if naturezaOrientacao == "INICIACAO_CIENTIFICA":
+           titulo_graduacao = titulo_graduacao + " - <u>Iniciação Científica</u>"
 
-    elif naturezaOrientacao == "TRABALHO_DE_CONCLUSAO_DE_CURSO_GRADUACAO":
-       titulo_graduacao = titulo_graduacao + " - <u>Trabalho de Conclusão de Curso</u>"
-    lista_titulo_graduacao.append(titulo_graduacao)
+        elif naturezaOrientacao == "TRABALHO_DE_CONCLUSAO_DE_CURSO_GRADUACAO":
+           titulo_graduacao = titulo_graduacao + " - <u>Trabalho de Conclusão de Curso</u>"
 
-    ano_graduacao = gggb.attributes["ANO"].value                       # Ano do graduando
-    ano_graduacao = ano_graduacao.encode('utf-8')
-    ano_graduacao = str(ano_graduacao)
-    lista_ano_graduacao.append(ano_graduacao)
+        else:
+            titulo_graduacao = titulo_graduacao + " - <u>" + str(naturezaOrientacao) + "</u>"
 
-    contGraduacao += 1
+        lista_titulo_graduacao.append(titulo_graduacao)
 
-detalhamento_graduacao = xmldoc.getElementsByTagName("DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS")
-for ggg in detalhamento_graduacao:
-    graduando = ggg.attributes["NOME-DO-ORIENTADO"].value              # Nome do graduando
-    graduando = graduando.encode('utf-8')
-    graduando = str(graduando)
-    lista_nome_graduacao.append(graduando)
+        ano_graduacao = gggb.attributes["ANO"].value                    # Ano do projeto de graduação
+        ano_graduacao = ano_graduacao.encode('utf-8')
+        ano_graduacao = str(ano_graduacao)
+        lista_ano_graduacao.append(ano_graduacao)
 
-lista_nome_graduacao.reverse()
-lista_ano_graduacao.reverse()
-lista_titulo_graduacao.reverse()
+        contGraduacao += 1
 
-for grad in range(contGraduacao):
-        orientacoes_graduacao.write('<p>' + str(lista_nome_graduacao[grad]) + ' (' + str(lista_ano_graduacao[grad]) + ') </p>' + '\n')
-        orientacoes_graduacao.write('<p class="titulo_orientacoes">' + str(lista_titulo_graduacao[grad]) + '</p>')
+    detalhamento_graduacao = xmldoc.getElementsByTagName("DETALHAMENTO-DE-OUTRAS-ORIENTACOES-CONCLUIDAS")
+    for ggg in detalhamento_graduacao:
+        graduando = ggg.attributes["NOME-DO-ORIENTADO"].value           # Nome do graduando
+        graduando = graduando.encode('utf-8')
+        graduando = str(graduando)
+        lista_nome_graduacao.append(graduando)
+
+    lista_nome_graduacao.reverse()
+    lista_ano_graduacao.reverse()
+    lista_titulo_graduacao.reverse()
+
+    for grad in range(contGraduacao):
+            orientacoes_graduacao.write('<p>' + str(lista_nome_graduacao[grad]) + ' (' + str(lista_ano_graduacao[grad]) + ') </p>' + '\n')
+            orientacoes_graduacao.write('<p class="titulo_orientacoes">' + str(lista_titulo_graduacao[grad]) + '</p>')
 
 orientacoes_graduacao.write("</body>\n</html>")
 orientacoes_graduacao.close()
 ###############################################################################
 
+'''                    **  Orientações em andamento  **                     '''
+###############################################################################
+'''          Iframe - orientacoes_doutorado_and.html (Aba Orientações)          '''
+orientacoes_doutorado_and = open("orientacoes_doutorado_and.html", "w")   # Abrindo/criando o arquivo no modo escrita
+criaHTML(orientacoes_doutorado_and)                                       # Configurações iniciais do HTML
+
+# Inicializando as listas de dados para as orientações de doutorado
+lista_nome_doutorado_and = []
+lista_ano_doutorado_and = []
+lista_titulo_doutorado_and = []
+contDoutorado_and = 0                                                     # Contador do número de orientações de doutorado
+
+basico_doutorado_and = xmldoc.getElementsByTagName("DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO")
+
+if basico_doutorado_and is not None:
+    for dddb_and in basico_doutorado_and:
+        titulo_doutorado_and = dddb_and.attributes["TITULO-DO-TRABALHO"].value   # Título do doutorando
+        titulo_doutorado_and = titulo_doutorado_and.encode('utf-8')
+        titulo_doutorado_and = str(titulo_doutorado_and)
+        lista_titulo_doutorado_and.append(titulo_doutorado_and)
+
+        ano_doutorado_and = dddb_and.attributes["ANO"].value                 # Ano do doutorado
+        ano_doutorado_and = ano_doutorado_and.encode('utf-8')
+        ano_doutorado_and = str(ano_doutorado_and)
+        lista_ano_doutorado_and.append(ano_doutorado_and)
+
+        contDoutorado_and += 1
+
+    detalhamento_doutorado_and = xmldoc.getElementsByTagName("DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-DOUTORADO")
+    for ddd_and in detalhamento_doutorado_and:
+        doutorando_and = ddd_and.attributes["NOME-DO-ORIENTANDO"].value      # Nome do doutorando
+        doutorando_and = doutorando_and.encode('utf-8')
+        doutorando_and = str(doutorando_and)
+        lista_nome_doutorado_and.append(doutorando_and)
+
+    lista_nome_doutorado_and.reverse()
+    lista_ano_doutorado_and.reverse()
+    lista_titulo_doutorado_and.reverse()
+
+    for phd_and in range(contDoutorado_and):
+        orientacoes_doutorado_and.write('<p>' + str(lista_nome_doutorado_and[phd_and]) + ' (' + str(lista_ano_doutorado_and[phd_and]) + ') </p>' + '\n')
+        orientacoes_doutorado_and.write('<p class="titulo_orientacoes">' + str(lista_titulo_doutorado_and[phd_and]) + '</p>')
+
+orientacoes_doutorado_and.write("</body>\n</html>")
+orientacoes_doutorado_and.close()
+###############################################################################
+
+###############################################################################
+'''        Iframe - orientacoes_mestrado_and.html (Aba Orientações)         '''
+orientacoes_mestrado_and = open("orientacoes_mestrado_and.html", "w")         # Abrindo/criando o arquivo no modo escrita
+criaHTML(orientacoes_mestrado_and)                                            # Configurações iniciais do HTML
+
+# Inicializando as listas de dados para as orientações de mestrado
+lista_nome_mestrado_and = []
+lista_ano_mestrado_and = []
+lista_titulo_mestrado_and = []
+contMestrado_and = 0                                                          # Contador do número de orientações de mestrado
+
+basico_mestrado_and = xmldoc.getElementsByTagName("DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO")
+if basico_mestrado_and is not None:
+    for mmmb_and in basico_mestrado_and:
+        titulo_mestrado_and = mmmb_and.attributes["TITULO-DO-TRABALHO"].value # Título do mestrando
+        titulo_mestrado_and = titulo_mestrado_and.encode('utf-8')
+        titulo_mestrado_and = str(titulo_mestrado_and)
+        lista_titulo_mestrado_and.append(titulo_mestrado_and)
+
+        ano_mestrado_and = mmmb_and.attributes["ANO"].value                   # Ano do início do mestrado
+        ano_mestrado_and = ano_mestrado_and.encode('utf-8')
+        ano_mestrado_and = str(ano_mestrado_and)
+        lista_ano_mestrado_and.append(ano_mestrado_and)
+
+        contMestrado_and += 1
+
+    detalhamento_mestrado_and = xmldoc.getElementsByTagName("DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-MESTRADO")
+    for mmm_and in detalhamento_mestrado_and:
+        mestrando_and = mmm_and.attributes["NOME-DO-ORIENTANDO"].value        # Nome do mestrando
+        mestrando_and = mestrando_and.encode('utf-8')
+        mestrando_and = str(mestrando_and)
+        lista_nome_mestrado_and.append(mestrando_and)
+
+    lista_nome_mestrado_and.reverse()
+    lista_ano_mestrado_and.reverse()
+    lista_titulo_mestrado_and.reverse()
+
+    for mest_and in range(contMestrado_and):
+        orientacoes_mestrado_and.write('<p>' + str(lista_nome_mestrado_and[mest_and]) + ' (' + str(lista_ano_mestrado_and[mest_and]) + ') </p>' + '\n')
+        orientacoes_mestrado_and.write('<p class="titulo_orientacoes">' + str(lista_titulo_mestrado_and[mest_and]) + '</p>')
+
+orientacoes_mestrado_and.write("</body>\n</html>")
+orientacoes_mestrado_and.close()
+###############################################################################
+
+###############################################################################
+'''               Iframe - orientacoes_graduacao_and.html (Aba Orientações)              '''
+orientacoes_graduacao_and = open("orientacoes_graduacao_and.html", "w")       # Abrindo/criando o arquivo no modo escrita
+criaHTML(orientacoes_graduacao_and)                                           # Configurações iniciais do HTML
+
+# Inicializando as listas de dados para as orientações de graduação
+lista_nome_graduacao_and = []
+lista_ano_graduacao_and = []
+lista_titulo_graduacao_and = []
+contGraduacao_and = 0                                                         # Contador do número de orientações de mestrado
+
+flagNatureza_and = 0                                                          # 1-IC, 2-TCC
+
+basico_graduacao_and = xmldoc.getElementsByTagName("DADOS-BASICOS-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA")
+if basico_graduacao_and is not None:
+    for gggb_and in basico_graduacao_and:
+        titulo_graduacao_and = gggb_and.attributes["TITULO-DO-TRABALHO"].value # Título do projeto de graduação
+        titulo_graduacao_and = titulo_graduacao_and.encode('utf-8')
+        titulo_graduacao_and = str(titulo_graduacao_and)
+
+        naturezaOrientacao_and = gggb_and.attributes["NATUREZA"].value
+        naturezaOrientacao_and = naturezaOrientacao_and.encode('utf-8')
+
+        if naturezaOrientacao_and == "INICIACAO_CIENTIFICA":
+           titulo_graduacao_and = titulo_graduacao_and + " - <u>Iniciação Científica</u>"
+
+        elif naturezaOrientacao_and == "TRABALHO_DE_CONCLUSAO_DE_CURSO_GRADUACAO":
+           titulo_graduacao_and = titulo_graduacao_and + " - <u>Trabalho de Conclusão de Curso</u>"
+        else:
+            titulo_graduacao_and = titulo_graduacao_and + " - <u>" + str(naturezaOrientacao_and) + "</u>"
+
+        lista_titulo_graduacao_and.append(titulo_graduacao_and)
+
+        ano_graduacao_and = gggb_and.attributes["ANO"].value                   # Ano do início do projeto de graduação
+        ano_graduacao_and = ano_graduacao_and.encode('utf-8')
+        ano_graduacao_and = str(ano_graduacao_and)
+        lista_ano_graduacao_and.append(ano_graduacao_and)
+
+        contGraduacao_and += 1
+
+    detalhamento_graduacao_and = xmldoc.getElementsByTagName("DETALHAMENTO-DA-ORIENTACAO-EM-ANDAMENTO-DE-INICIACAO-CIENTIFICA")
+    for ggg_and in detalhamento_graduacao_and:
+        graduando_and = ggg_and.attributes["NOME-DO-ORIENTANDO"].value         # Nome do graduando
+        graduando_and = graduando_and.encode('utf-8')
+        graduando_and = str(graduando_and)
+        lista_nome_graduacao_and.append(graduando_and)
+
+    lista_nome_graduacao_and.reverse()
+    lista_ano_graduacao_and.reverse()
+    lista_titulo_graduacao_and.reverse()
+
+    for grad_and in range(contGraduacao_and):
+            orientacoes_graduacao_and.write('<p>' + str(lista_nome_graduacao_and[grad_and]) + ' (' + str(lista_ano_graduacao_and[grad_and]) + ') </p>' + '\n')
+            orientacoes_graduacao_and.write('<p class="titulo_orientacoes">' + str(lista_titulo_graduacao_and[grad_and]) + '</p>')
+
+orientacoes_graduacao_and.write("</body>\n</html>")
+orientacoes_graduacao_and.close()
+###############################################################################
+
+
 ###############################################################################
 '''                      Artigos e trabalhos                                '''
 ###############################################################################
 '''               Iframe - periodicos.html (Aba Publicações)              '''
-periodicos = open("periodicos.html", "w")             # Abrindo/criando o arquivo no modo escrita
+periodicos = open("periodicos.html", "w")                                      # Abrindo/criando o arquivo no modo escrita
 
 basico_periodicos = xmldoc.getElementsByTagName("DADOS-BASICOS-DO-ARTIGO")
-contadorPeriodico = 1                        # Contador de artigos
 
-lista_titulo_periodico = []
-lista_ano_periodico = []
-lista_link_periodico = []
-lista_local_periodico = []
+if basico_periodicos is not None:
+    contadorPeriodico = 0                                                      # Contador de artigos
 
-# Um dicionario para cada lista, assim a relação entre eles é feita pelos indices dos dicicionarios
-dicionario_periodicos_titulos = {}
-dicionario_periodicos_anos = {}
-dicionario_periodicos_links = {}
-dicionario_periodicos_locais = {}
+    lista_titulo_periodico = []
+    lista_ano_periodico = []
+    lista_link_periodico = []
+    lista_local_periodico = []
 
-periodicos.write("<br/>")
+    # Um dicionario para cada lista, assim a relação entre eles é feita pelos indices dos dicicionarios
+    dicionario_periodicos_titulos = {}
+    dicionario_periodicos_anos = {}
+    dicionario_periodicos_links = {}
+    dicionario_periodicos_locais = {}
 
-for a in basico_periodicos:
-    # Cada nome de artigo tambem ficará na formatação UTF-8
-    titulo_do_periodico = (a.attributes["TITULO-DO-ARTIGO"].value).encode('utf-8')
-    lista_titulo_periodico.append(titulo_do_periodico)
+    periodicos.write("<br/>")
 
-    ano_do_periodico = a.attributes["ANO-DO-ARTIGO"].value
-    lista_ano_periodico.append(ano_do_periodico)
+    for a in basico_periodicos:
+        # Cada nome de artigo tambem ficará na formatação UTF-8
+        titulo_do_periodico = (a.attributes["TITULO-DO-ARTIGO"].value).encode('utf-8')
+        titulo_do_periodico = str(titulo_do_periodico)
 
-    link_do_periodico = a.attributes["HOME-PAGE-DO-TRABALHO"].value
-    link_do_periodico = str(link_do_periodico)
-    link_do_periodico =  link_do_periodico.replace("doi:", "http://dx.doi.org/")
-    #Removendo '[' e ']'
-    link_do_periodico =  link_do_periodico.replace("[", "")
-    link_do_periodico =  link_do_periodico.replace("]", "")
-    lista_link_periodico.append(link_do_periodico)
+        # O método de decodificação () decodifica a string usando o codec registrado para codificação.
+        # O padrão é a codificação seqüência de caracteres padrão.
+        titulo_do_periodico.decode(encoding='UTF-8',errors='strict')
+        #titulo_do_periodico = titulo_do_periodico.encode('utf-8')
 
-    contadorPeriodico += 1
+        lista_titulo_periodico.append(titulo_do_periodico)
 
-''' Autores dos periódicos '''
-autores = xmldoc.getElementsByTagName("AUTORES")
-for au in autores:
-        autor = au.attributes["NOME-COMPLETO-DO-AUTOR"].value
+        ano_do_periodico = a.attributes["ANO-DO-ARTIGO"].value
+        lista_ano_periodico.append(ano_do_periodico)
 
-''' Locais de publicação dos periódicos '''
-locais = xmldoc.getElementsByTagName("DETALHAMENTO-DO-ARTIGO")
-for loc in locais:
-        local = loc.attributes["LOCAL-DE-PUBLICACAO"].value
-        lista_local_periodico.append(local)
+        link_do_periodico = a.attributes["HOME-PAGE-DO-TRABALHO"].value
+        link_do_periodico = str(link_do_periodico)
+        link_do_periodico =  link_do_periodico.replace("doi:", "http://dx.doi.org/")
+        #Removendo '[' e ']'
+        link_do_periodico =  link_do_periodico.replace("[", "")
+        link_do_periodico =  link_do_periodico.replace("]", "")
+        lista_link_periodico.append(link_do_periodico)
+
+        contadorPeriodico += 1
+
+    ''' Autores dos periódicos '''
+    autores = xmldoc.getElementsByTagName("AUTORES")
+    for au in autores:
+            autor = au.attributes["NOME-COMPLETO-DO-AUTOR"].value
+
+    ''' Locais de publicação dos periódicos '''
+    locais = xmldoc.getElementsByTagName("DETALHAMENTO-DO-ARTIGO")
+    for loc in locais:
+            local = loc.attributes["LOCAL-DE-PUBLICACAO"].value
+            local = local.encode('utf-8')
+            lista_local_periodico.append(local)
 
 
-# Organizando a lista de dados para ficar em ordem decrescente de acordo com os anos de publicação
-lista_titulo_periodico.reverse()
-lista_ano_periodico.reverse()
-lista_link_periodico.reverse()
-lista_local_periodico.reverse()
+    # Organizando a lista de dados para ficar em ordem decrescente de acordo com os anos de publicação
+    lista_titulo_periodico.reverse()
+    lista_ano_periodico.reverse()
+    lista_link_periodico.reverse()
+    lista_local_periodico.reverse()
 
-# Montando dicionario com as listas
-for dic in range(contadorPeriodico-1):
-    dicionario_periodicos_titulos.update( {str(dic):str(lista_titulo_periodico[dic])})
-    dicionario_periodicos_anos.update( {str(dic):str(lista_ano_periodico[dic])})
-    dicionario_periodicos_links.update( {str(dic):str(lista_link_periodico[dic])})
-    dicionario_periodicos_locais.update( {str(dic):str(lista_local_periodico[dic])})
-
-for per in range(contadorPeriodico-1):
-    if lista_link_periodico[per] != "":
-        periodicos.write('<a target="blank" ')
-        periodicos.write("href='" + str(lista_link_periodico[per])  + "'")
-        periodicos.write(' > ' + str(lista_titulo_periodico[per].encode('utf-8')) + ' (' + str(lista_ano_periodico[per].encode('utf-8')) + ') ')
-        periodicos.write('</a> <br/>'  + str(lista_local_periodico[per].encode('utf-8')) + '\n')
-        periodicos.write("\n<br/>\n")            # Quebra de linha
-    else:
-        periodicos.write(str(lista_titulo_periodico[per].encode('utf-8')) + ' (' + str(lista_ano_periodico[per].encode('utf-8')) + ') ')
-        periodicos.write('\n' + '<p class="local_periodico"' + ">" + str(lista_local_periodico[per].encode('utf-8')) + ' </p>' + '\n')
-        periodicos.write("\n")            # Quebra de linha
+    for per in range(contadorPeriodico):
+        if lista_link_periodico[per] != "":
+            periodicos.write('<a target="blank" ')
+            periodicos.write("href='" + str(lista_link_periodico[per])  + "'")
+            periodicos.write(" > " + str(lista_titulo_periodico[per]) + " (" + str(lista_ano_periodico[per]) + ") ")
+            periodicos.write('</a> <br/>'  + str(lista_local_periodico[per].encode('utf-8')) + '\n')
+            periodicos.write("\n<br/>\n")            # Quebra de linha
+        else:
+            periodicos.write(str(lista_titulo_periodico[per]) + ' (' + str(lista_ano_periodico[per]) + ') ')
+            periodicos.write('\n' + '<p class="local_periodico"' + ">" + str(lista_local_periodico[per]) + ' </p>' + '\n')
+            periodicos.write("\n")                    # Quebra de linha
 
 periodicos.write("</body>\n</html>")
 periodicos.close()
@@ -834,78 +1061,70 @@ trab_anais = open("trab_anais.html", "w")    # Abrindo/criando o arquivo no modo
 
 criaHTML(trab_anais)
 basico_trabalhos = xmldoc.getElementsByTagName("DADOS-BASICOS-DO-TRABALHO")
-contadorTrabalho = 1                        # Contador de artigos = 1                        # Contador de artigos
 
-lista_titulo_trabalho = []
-lista_ano_trabalho = []
-lista_link_trabalho = []
-lista_local_trabalho = []
+if basico_trabalhos is not None:
+    contadorTrabalho = 0                         # Contador de trabalhos
 
-# Um dicionario para cada lista, assim a relação entre eles é feita pelos indices dos dicicionarios
-dicionario_trabalhos_titulos = {}
-dicionario_trabalhos_anos = {}
-dicionario_trabalhos_links = {}
-dicionario_trabalhos_locais = {}
+    lista_titulo_trabalho = []
+    lista_ano_trabalho = []
+    lista_link_trabalho = []
+    lista_local_trabalho = []
 
-trab_anais.write("<br/>")
+    # Um dicionario para cada lista, assim a relação entre eles é feita pelos indices dos dicicionarios
+    dicionario_trabalhos_titulos = {}
+    dicionario_trabalhos_anos = {}
+    dicionario_trabalhos_links = {}
+    dicionario_trabalhos_locais = {}
 
-for t in basico_trabalhos:
-    # Cada nome de artigo tambem ficará na formatação UTF-8
-    titulo_trabalho = (t.attributes["TITULO-DO-TRABALHO"].value).encode('utf-8')
-    lista_titulo_trabalho.append(titulo_trabalho)
+    trab_anais.write("<br/>")
 
-    ano_trabalho = t.attributes["ANO-DO-TRABALHO"].value
-    lista_ano_trabalho.append(ano_trabalho)
+    for t in basico_trabalhos:
+        # Cada nome de artigo tambem ficará na formatação UTF-8
+        titulo_trabalho = (t.attributes["TITULO-DO-TRABALHO"].value).encode('utf-8')
+        titulo_trabalho.decode(encoding='UTF-8',errors='strict')
+        lista_titulo_trabalho.append(titulo_trabalho)
 
-    link_do_trabalho = t.attributes["HOME-PAGE-DO-TRABALHO"].value
-    link_do_trabalho = str(link_do_trabalho)
-    link_do_trabalho =  link_do_trabalho.replace("doi:", "http://dx.doi.org/")
-    #Removendo '[' e ']'
-    link_do_trabalho =  link_do_trabalho.replace("[", "")
-    link_do_trabalho =  link_do_trabalho.replace("]", "")
-    lista_link_trabalho.append(link_do_trabalho)
+        ano_trabalho = t.attributes["ANO-DO-TRABALHO"].value
+        lista_ano_trabalho.append(ano_trabalho)
 
-    contadorTrabalho += 1
+        link_do_trabalho = t.attributes["HOME-PAGE-DO-TRABALHO"].value
+        link_do_trabalho = str(link_do_trabalho)
+        link_do_trabalho =  link_do_trabalho.replace("doi:", "http://dx.doi.org/")
+        #Removendo '[' e ']'
+        link_do_trabalho =  link_do_trabalho.replace("[", "")
+        link_do_trabalho =  link_do_trabalho.replace("]", "")
+        lista_link_trabalho.append(link_do_trabalho)
 
+        contadorTrabalho += 1
 
-''' Autores dos trabalhos '''
-autores_trabalhos = xmldoc.getElementsByTagName("AUTORES")
-for tr in autores_trabalhos:
-        autor_trabalho = tr.attributes["NOME-COMPLETO-DO-AUTOR"].value
+    ''' Autores dos trabalhos '''
+    autores_trabalhos = xmldoc.getElementsByTagName("AUTORES")
+    for tr in autores_trabalhos:
+            autor_trabalho = tr.attributes["NOME-COMPLETO-DO-AUTOR"].value
 
-''' Locais de publicação dos trabalhos '''
-locais_trabalhos = xmldoc.getElementsByTagName("DETALHAMENTO-DO-TRABALHO")
-for loctr in locais_trabalhos:
-        local_trabalho = loctr.attributes["NOME-DO-EVENTO"].value
-        lista_local_trabalho.append(local_trabalho)
+    ''' Locais de publicação dos trabalhos '''
+    locais_trabalhos = xmldoc.getElementsByTagName("DETALHAMENTO-DO-TRABALHO")
+    for loctr in locais_trabalhos:
+            local_trabalho = loctr.attributes["NOME-DO-EVENTO"].value
+            lista_local_trabalho.append(local_trabalho)
 
-# Organizando a lista de dados para ficar em ordem decrescente de acordo com os anos de publicação
-lista_titulo_trabalho.reverse()
-lista_ano_trabalho.reverse()
-lista_link_trabalho.reverse()
-lista_local_trabalho.reverse()
+    # Organizando a lista de dados para ficar em ordem decrescente de acordo com os anos de publicação
+    lista_titulo_trabalho.reverse()
+    lista_ano_trabalho.reverse()
+    lista_link_trabalho.reverse()
+    lista_local_trabalho.reverse()
 
-'''
-# Montando dicionario com as listas
-for dictr in range(contadorTrabalho-1):
-    dicionario_trabalhos_titulos.update( {str(dictr):str(lista_titulo_trabalho[dictr])})
-    dicionario_trabalhos_anos.update( {str(dictr):str(lista_ano_trabalho[dictr])})
-    dicionario_trabalhos_links.update( {str(dictr):str(lista_link_trabalho[dictr])})
-    dicionario_trabalhos_locais.update( {str(dictr):str(lista_local_trabalho[dictr])})
-'''
-
-for tra in range(contadorTrabalho-1):
-    if lista_link_trabalho[tra] != "":
-        trab_anais.write('<a target="blank" ')
-        trab_anais.write("href='" + str(lista_link_trabalho[tra].encode('utf-8'))  + "'")
-        trab_anais.write(str(lista_titulo_trabalho[tra]) + ' (' + str(lista_ano_trabalho[tra].encode('utf-8')) + ') ')
-        trab_anais.write("</a>"+ "\n" + "<p class='local_trabalho'" + ">" + str(lista_local_trabalho[tra].encode('utf-8')) + " </p>" + "\n")
-        trab_anais.write("\n")            # Quebra de linha
-    else:
-        trab_anais.write('<p>' + str(lista_titulo_trabalho[tra]) + ' (' + str(lista_ano_trabalho[tra].encode('utf-8')) + ') ' + '</p>')
-        trab_anais.write("\n" + "<p class='local_trabalho'" + ">" + str(lista_local_trabalho[tra].encode('utf-8')) + " </p>" + "\n")
-        trab_anais.write("\n")            # Quebra de linha
-
+    for tra in range(contadorTrabalho):
+        if lista_link_trabalho[tra] != "":
+            trab_anais.write('<a target="blank" ')
+            trab_anais.write("href='" + str(lista_link_trabalho[tra].encode('utf-8'))  + "'")
+            trab_anais.write(str(lista_titulo_trabalho[tra]) + ' (' + str(lista_ano_trabalho[tra].encode('utf-8')) + ') ')
+            trab_anais.write("</a>"+ "\n" + "<p class='local_trabalho'" + ">" + str(lista_local_trabalho[tra].encode('utf-8')) + " </p>" + "\n")
+            trab_anais.write("\n")            # Quebra de linha
+        else:
+            trab_anais.write('<p>' + str(lista_titulo_trabalho[tra]) + ' (' + str(lista_ano_trabalho[tra].encode('utf-8')) + ') ' + '</p>')
+            trab_anais.write("\n" + "<p class='local_trabalho'" + ">" + str(lista_local_trabalho[tra].encode('utf-8')) + " </p>" + "\n")
+            trab_anais.write("\n")            # Quebra de linha
 
 trab_anais.write("</body>\n</html>")
 trab_anais.close()
@@ -935,6 +1154,18 @@ estilo_css.write(
         color: black;
     }
 
+    a.link_orientacoes
+	{
+		font-size: 15pt;
+
+	}
+	a.link_orientacoes:hover
+	{
+	    -webkit-transition: width 2s, height 2s, -webkit-transform 2s;
+        font-size: 16pt;
+        text-decoration: bold;
+        color: #6e4545;     /*Marrom claro*/
+	}
     /* Utilizei uma classe no rodapé, para só modificar alí os links */
     a.menu_rodape
     {
@@ -997,7 +1228,7 @@ estilo_css.write(
 
     section#email_contato
     {
-        font-size: 30pt;
+        font-size: 20pt;
     }
 
 
@@ -1300,17 +1531,17 @@ estilo_css.write(
     }
 
     /* Orientações */
-    iframe#orient_m
+    iframe.orient_m
     {
         height: 179px;
         width: 901px;
     }
-    iframe#orient_d
+    iframe.orient_d
     {
         height: 178px;
         width: 901px;
     }
-    iframe#orient_ic
+    iframe.orient_ic
     {
         height: 179px;
         width: 901px;
